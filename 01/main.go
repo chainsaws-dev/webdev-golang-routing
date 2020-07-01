@@ -7,13 +7,12 @@ import (
 )
 
 func main() {
-	sm := http.NewServeMux()
 
-	sm.HandleFunc("/", roothandler)
-	sm.HandleFunc("/dog/", doghandler)
-	sm.HandleFunc("/me/", mehandler)
+	http.HandleFunc("/", roothandler)
+	http.HandleFunc("/dog/", doghandler)
+	http.HandleFunc("/me/", mehandler)
 
-	http.ListenAndServe(":8080", sm)
+	http.ListenAndServe(":8080", nil)
 }
 
 func roothandler(rw http.ResponseWriter, req *http.Request) {
