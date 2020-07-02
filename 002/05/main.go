@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"strings"
 	"time"
 )
 
@@ -34,17 +33,13 @@ func main() {
 func handle(conn net.Conn) {
 
 	defer conn.Close()
-	m, curi := request(conn)
 
-	distext := fmt.Sprintln(m, curi)
+	request(conn)
 
-	response(conn, distext)
+	response(conn)
 }
 
-func request(conn net.Conn) (method string, uri string) {
-	var m string
-	var resuri string
-	var p string
+func request(conn net.Conn) {
 
 	err := conn.SetDeadline(time.Now().Add(10 * time.Second))
 
@@ -57,18 +52,7 @@ func request(conn net.Conn) (method string, uri string) {
 
 	for newscanner.Scan() {
 		ln := newscanner.Text()
-		//fmt.Println(ln)
-		if i == 0 {
-			fld1 := strings.Fields(ln)
-			m = fld1[0]
-			p = fld1[1]
-		}
-
-		if i == 1 {
-			fld2 := strings.Fields(ln)
-			resuri = "http://" + fld2[1]
-			resuri += p
-		}
+		fmt.Println(ln)
 
 		if ln == "" {
 			break
@@ -76,19 +60,10 @@ func request(conn net.Conn) (method string, uri string) {
 		i++
 	}
 
-	fmt.Println(m, resuri)
-
-	return m, resuri
 }
 
-func response(conn net.Conn, displaytext string) {
+func response(conn net.Conn) {
 
-	body := `<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Состояние сервера</title></head><body><strong>Сервер работает!</strong></body></html>`
-	body = strings.Replace(body, `<strong>Сервер работает!</strong>`, `<strong>Сервер работает!</strong><ul><li>`+displaytext+`</li></ul>`, 1)
-	fmt.Fprint(conn, "HTTP/1.1 200 OK\r\n")
-	fmt.Fprintf(conn, "Content-Length: %d\r\n", len(body))
-	fmt.Fprint(conn, "Content-Type: text/html\r\n")
-	fmt.Fprint(conn, "\r\n")
-	fmt.Fprint(conn, body)
+	fmt.Fprintln(conn, "WE WROTE SOMETHING")
 
 }
