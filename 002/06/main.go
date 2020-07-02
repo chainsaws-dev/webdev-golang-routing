@@ -64,6 +64,11 @@ func request(conn net.Conn) {
 
 func response(conn net.Conn) {
 
-	fmt.Fprintln(conn, "WE WROTE SOMETHING")
+	body := `<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Состояние сервера</title></head><body><strong>Сервер работает!</strong></body></html>`
+	fmt.Fprint(conn, "HTTP/1.1 200 OK\r\n")
+	fmt.Fprintf(conn, "Content-Length: %d\r\n", len(body))
+	fmt.Fprint(conn, "Content-Type: text/html\r\n")
+	fmt.Fprint(conn, "\r\n")
+	fmt.Fprint(conn, body)
 
 }
