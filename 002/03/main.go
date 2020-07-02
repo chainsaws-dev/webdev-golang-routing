@@ -49,4 +49,6 @@ func handle(conn net.Conn) {
 	fmt.Println("Code got here.")
 	io.WriteString(conn, "I see you connected.")
 
+	// WE CANNOT WRITE STRINGS WITHOUT FOLOWING THE RULES OF RESPONSE MARKUP OTHERWISE NOTHING WILL BE DISPLAYED IN BROWSER
+
 }
